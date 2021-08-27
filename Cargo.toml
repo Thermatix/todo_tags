@@ -2,6 +2,7 @@
 name = "todo_tags"
 version = "0.1.0"
 edition = "2018"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
@@ -11,6 +12,7 @@ prost = "0.6.1"
 tonic = {version="0.2.0",features = ["tls"]}
 tokio = {version="0.2.18",features = ["stream", "macros"]}
 futures = "0.3"
+prost-types = "0.8.0"
 
 [build-dependencies]
 tonic-build = "0.2.0"

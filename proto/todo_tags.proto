@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package todoTags;
+
+service Say {
+    rpc Add (Project) returns (Response);
+    rpc Edit (Project) returns (Response);
+    rpc Display (Project) returns (Project);
+    rpc Write (Item) returns (Response);
+    rpc Remove (Item) returns (Response);
+    rpc Show (Item) returns (Item);
+    rpc Find (Query) returns (Items);
+}
+
+enum ResType {
+    ERROR = 0;
+    SUCCESS = 1;
+    NOTE = 2;
+}
+
+message Item {
+    string tag = 1;
+    string description = 2;
+    repeated string file_path = 3;
+}
+
+message Query {
+    string tag_query = 1;
+}
+
+message Response {
+    ResType type = 1;
+    string message = 2;
+}
+
+message Items {
+    uint64 count = 1; 
+    repeated Item items = 2;
+}
+
+message Project {
+    string name = 1;
+    string folder = 2;
+    Items items = 3;
+}

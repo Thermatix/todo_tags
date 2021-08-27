@@ -1,6 +1,8 @@
 use seahorse::{App, Command, Context, Flag, FlagType, error::FlagError};
 use std::env;
 
+mod gprc;
+
 fn main() {
     App::new(env!("CARGO_PKG_NAME"))
         .description(env!("CARGO_PKG_DESCRIPTION"))
