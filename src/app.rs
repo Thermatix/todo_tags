@@ -1,11 +1,11 @@
 use seahorse::{App, Command, Context, Flag, FlagType, error::FlagError};
 
-pub fn new(args: Vec<String>) {
+pub fn new() -> App {
     App::new(env!("CARGO_PKG_NAME"))
         .description(env!("CARGO_PKG_DESCRIPTION"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .version(env!("CARGO_PKG_VERSION"))
-        .usage("cli [name]")
+        .usage("tdt [command]")
         .command(
             Command::new("add")
             .description("Add a project folder")
@@ -42,7 +42,7 @@ pub fn new(args: Vec<String>) {
             .alias("s")
             .usage("tdt show [item]")
             .action(show_action)
-        ).run(args)
+        )
 }
 fn add_action(c: &Context) {}
 fn edit_action(c: &Context) {}
