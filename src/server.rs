@@ -6,7 +6,7 @@ use std::process::Command;
 use std::fs::{self, File};
 
 
-use super::gprc::say_server::{Say, SayServer};
+use super::gprc::tdt_server::{Tdt, TdtServer};
 use super::envs;
 
 mod data_types {
@@ -68,7 +68,7 @@ impl Server {
                     println!("Listening on {}", self.address);
                     match self.tonic_server
                         .add_service(
-                            SayServer::new(
+                            TdtServer::new(
                                 TagService::default()
                                 )
                             )
@@ -97,7 +97,7 @@ impl Server {
 struct TagService {}
 
 #[tonic::async_trait]
-impl Say for TagService {
+impl Tdt for TagService {
     /// Add a project
     async fn add(&self, request: Request<data_types::Project>)->Result<Response<data_types::Response>, Status> {
         //TODO: Impliment add project functionality 
@@ -135,8 +135,8 @@ impl Say for TagService {
         //TODO: Impliment write item functionality 
         unimplemented!()
     }
-    // async fn send(&self,request:Request<SayRequest>)->Result<Response<SayResponse>,Status>{
-    //     Ok(Response::new(SayResponse{
+    // async fn send(&self,request:Request<TdtRequest>)->Result<Response<TdtResponse>,Status>{
+    //     Ok(Response::new(TdtResponse{
     //         message:format!("hello {}",request.get_ref().name),
     //     }))
     // }

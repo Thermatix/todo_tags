@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todoTags;
 
-service Say {
+service TDT {
     rpc Add (Project) returns (Response);
     rpc Edit (Project) returns (Response);
     rpc Display (Project) returns (Project);
