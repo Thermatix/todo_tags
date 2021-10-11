@@ -19,6 +19,7 @@ tracing-subscriber = "0.2.24"
 dirs = "4.0.0"
 tonic = {version="0.2.0",features = ["tls"]}
 tokio = {version="0.2.18",features = ["stream", "macros"]}
+http = "0.2.5"
 
 [build-dependencies]
 tonic-build = "0.2.0"
