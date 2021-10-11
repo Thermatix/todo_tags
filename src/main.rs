@@ -1,5 +1,6 @@
 mod gprc;
 mod server;
+mod client;
 mod app;
 
 mod envs;
@@ -12,7 +13,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>  {
     setup()?;
 
     let app = app::new();
-    let mut server = server::Server::new(envs::server_addr());
+    let mut server = server::Server::new();
     server.start().await;
     app.run(envs::args().collect());
     Ok(())

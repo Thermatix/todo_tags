@@ -29,9 +29,9 @@ impl Drop for Server {
 }
 
 impl Server {
-    pub fn new(address: String) -> Self {
+    pub fn new() -> Self {
         Self {
-            address,
+            address: envs::server_addr(),
             tonic_server: TonicServer::builder(),
             child: false,
         }
