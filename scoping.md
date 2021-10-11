@@ -20,7 +20,7 @@ As the user I want to be able to:
          + file_path/releative/to_project/root
          + file_path/releative/to_project/root
      ```
- + For each Project:
+ + For a Project:
    - add {folder} {name} or {folder} or without a name
    - edit {name} meta-data (not sure what that will be yet)
    - show:
