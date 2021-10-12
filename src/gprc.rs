@@ -1,7 +1,18 @@
 tonic::include_proto!("todo_tags");
 
+#[derive(Debug)]
+pub enum Action {
+    Add(primatives::FolderName),
+    Edit(primatives::FolderName),
+    Display(primatives::FolderName),
+    Write(primatives::Item),
+    Remove(primatives::Item),
+    Show(primatives::Item),
+    Find(primatives::Query),
+}   
 
-mod primatives {
+
+pub mod primatives {
     pub trait Conversion {}
 
     pub type Item = (String, String, Vec<String>);
@@ -23,6 +34,7 @@ mod primatives {
     impl Conversion for super::Project {}
     impl Conversion for super::Item {}
     impl Conversion for super::Items {}
+    impl Conversion for super::Response {}
 
     impl From<Query> for super::Query {
         fn from(v: Query) -> Self {
