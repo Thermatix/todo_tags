@@ -21,7 +21,7 @@ enum ResType {
 message Item {
     string tag = 1;
     string description = 2;
-    repeated string file_path = 3;
+    repeated string file_paths = 3;
 }
 
 message Query {
