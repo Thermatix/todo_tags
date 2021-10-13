@@ -1,5 +1,9 @@
 tonic::include_proto!("todo_tags");
 
+pub mod data_types {
+    pub use super::{Item, Items, Query, Project,  ResType, Response};
+}
+
 #[derive(Debug)]
 pub enum Action {
     Add(primatives::FolderName),

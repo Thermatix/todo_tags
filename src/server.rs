@@ -5,13 +5,8 @@ use fork::{fork, Fork};
 use std::process::Command;
 use std::fs::{self, File};
 
-
-use super::gprc::tdt_server::{Tdt, TdtServer};
+use super::gprc::{tdt_server::{Tdt, TdtServer}, data_types};
 use super::envs;
-
-mod data_types {
-    pub use super::super::gprc::{Item, Items, Query, Project,  ResType, Response};
-}
 
 pub struct Server {
     address: String,

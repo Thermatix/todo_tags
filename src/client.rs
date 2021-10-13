@@ -1,14 +1,9 @@
 use tonic::{self, transport::Channel as TonicChannel};// Request, Response, Status};
 use http::uri::Uri;
 
-use super::gprc::{Action, tdt_client::TdtClient};
+use super::gprc::{Action, tdt_client::TdtClient, data_types};
 use super::envs;
 use std::convert::From;
-
-mod data_types {
-    pub use super::super::gprc::{Item, Items, Query, Project,  ResType, Response};
-
-}
 
 #[derive(Debug)]
 enum RequestResult {
