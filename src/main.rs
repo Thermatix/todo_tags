@@ -13,7 +13,9 @@ use tracing_subscriber::{self, EnvFilter};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>>  {
+    use std::env::current_dir;
     setup()?;
+    let cwd = current_dir()?.to_str().unwrap().to_owned();
     let matches = App::new(env!("CARGO_PKG_NAME"))
                         .setting(clap::AppSettings::ArgRequiredElseHelp)
                         .setting(clap::AppSettings::ColoredHelp)
@@ -23,52 +25,102 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>  {
                         .about(env!("CARGO_PKG_DESCRIPTION"))
                         .author(env!("CARGO_PKG_AUTHORS"))
                         .version(env!("CARGO_PKG_VERSION"))
-                        .usage("tdt [command]")
                         .subcommand(
                             App::new("add")
-                            .about("Add a project folder")
-                            .alias("a")
-                            .usage("tdt add(a) [project/folder] (name)")
-                            .arg(Arg::with_name("FOLDER")
-                                    .help("Path to the project folder")
-                                    .required(true)
-                                    .index(1))
-                            .arg(Arg::with_name("NAME")
-                                    .help("Name of the project")
-                                    .required(false)
-                                    .index(2))
+                                .about("Add a project folder")
+                                .alias("a")
+                                .arg(Arg::with_name("FOLDER")
+                                     .help("Path to the project folder")
+                                     .required(true)
+                                     .index(1))
+                                .arg(Arg::with_name("NAME")
+                                     .help("Name of the project, will default to folder name")
+                                     .required(false)
+                                     .index(2))
                         ).subcommand(
                             App::new("edit")
-                            .about("Edit project meta-data")
-                            .alias("e")
-                            .usage("tdt edit(e) [project name]")
+                                .about("Edit project meta-data")
+                                .alias("e")
+                                .arg(Arg::with_name("FOLDER")
+                                     .help("Path to the project folder")
+                                     .required(true)
+                                     .index(1))
+                                .arg(Arg::with_name("NAME")
+                                     .help("Name of the project, will default to folder name")
+                                     .required(false)
+                                     .index(2))
                         ).subcommand(
                             App::new("display")
-                            .about("Display the project todo list")
-                            .alias("d")
-                            .usage("tdt display(d) [project name]")
+                                .about("Display the project todo list")
+                                .alias("d")
+                                .arg(Arg::with_name("FOLDER")
+                                     .help("Path to the project folder")
+                                     .required(true)
+                                     .index(1))
+                                .arg(Arg::with_name("NAME")
+                                     .help("Name of the project, will default to folder name")
+                                     .required(false)
+                                     .index(2))
                         ).subcommand(
-                            App::new("write")
-                            .about("Write a given item")
-                            .alias("w")
-                            .usage("tdt write(w) [item] [about]")
+                                App::new("write")
+                                .about("Write a given item")
+                                .alias("w")
+                                .arg(Arg::with_name("NAME")
+                                     .help("Tag Name")
+                                     .required(true)
+                                     .index(1))
+                                .arg(Arg::with_name("DESCRIPTION")
+                                     .help("Tag Description")
+                                     .required(true)
+                                     .index(2))
+                                .arg(Arg::with_name("PATH")
+                                     .hidden(true)
+                                     .help("File Path of project the tag belongs to")
+                                     .long("File Path of project the tag belongs to, defaults to pwd")
+                                     .default_value(&cwd)
+                                     .required(false)
+                                     .index(3))
                         ).subcommand(
                             App::new("remove")
                             .about("Remove the given item")
                             .alias("r")
-                            .usage("tdt remove(r) [item]")
+                            .arg(Arg::with_name("NAME")
+                                 .help("Tag Name")
+                                 .required(true)
+                                 .index(1))
                         ).subcommand(
                             App::new("show")
                             .about("Show the given item")
                             .alias("s")
-                            .usage("tdt show [item]")
+                            .arg(Arg::with_name("NAME")
+                                 .help("Tag Name")
+                                 .required(true)
+                                 .index(1))
+                        .subcommand(
+                            App::new("find")
+                            .about("Find a tag and display any matching tags")
+                            .alias("f")
+                            .arg(Arg::with_name("QUERY")
+                                 .help("Pattern to match against Tag NAMEs")
+                                 .required(true)
+                                 .index(1)
+                                 )
+                            )
                         ).get_matches();
 
-    let mut server = server::Server::new();
-    server.start().await;
-    if let Some(matches) = matches.subcommand_matches("add") {
-        add_action(matches);
-    }
+    server::Server::new().start().await;
+
+    let mut client = client::Client::new().await; 
+
+    match client.request(matches.subcommand().into()).await {
+        Ok(r) => {
+            let response  = r;
+            println!("RESPONE: {:#?}", response);
+        },
+        Err(e) => {
+            eprintln!("Unable to make request to TDT gRPC server, {}", e);
+        }
+    };
 
     Ok(())
 }
@@ -89,22 +141,3 @@ fn setup() -> Result<(), Report> {
     Ok(())
 }
 
-async fn add_action<'a>(matches: &clap::ArgMatches<'a>) {
-    let mut client = client::Client::new().await; 
-    let  folder_name =
-    match (matches.value_of("FOLDER"), matches.value_of("NAME")) {
-        (Some(folder), Some(name)) => (folder.to_owned(), name.to_owned()),
-        (Some(folder), None) => (folder.to_owned(), folder.to_owned()),
-        _ => panic!("No folder or folder & project name provided")
-    };
-    match client.request(gprc::Action::Add(folder_name.into())).await {
-        Ok(r) => {
-            let response: data_types::Response = r.into();
-        }
-    };
-}
-fn edit_action() {todo!()}
-fn display_action() {todo!()}
-fn write_action() {todo!()}
-fn remove_action() {todo!()}
-fn show_action() {todo!()}
