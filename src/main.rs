@@ -1,3 +1,5 @@
+#[macro_use]
+mod macros;
 mod gprc;
 mod server;
 mod client;

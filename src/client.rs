@@ -5,74 +5,12 @@ use super::gprc::{Action, tdt_client::TdtClient, data_types};
 use super::envs;
 use std::convert::From;
 
-#[derive(Debug)]
-enum RequestResult {
-    Response(data_types::Response),
-    Project(data_types::Project),
-    Item(data_types::Item),
-    Items(data_types::Items),
-}
-
-impl From<data_types::Response> for RequestResult {
-    fn from(v: data_types::Response) -> Self {
-        Self::Response(v)
-    }
-}
-
-impl From<RequestResult> for data_types::Response {
-    fn from(v: RequestResult) -> Self {
-        match v {
-            RequestResult::Response(r) => r,
-            _ => panic!("Expected RequestResult::, got {:#?}", v),
-        }
-    }
-} 
-
-impl From<data_types::Project> for RequestResult {
-    fn from(v: data_types::Project) -> Self {
-        Self::Project(v)
-
-    }
-}
-
-impl From<RequestResult> for data_types::Project {
-    fn from(v: RequestResult) -> Self {
-        match v {
-            RequestResult::Project(p) => p,
-            _ => panic!("Expected RequestResult::, got {:#?}", v),
-        }
-    }
-} 
-
-impl From<data_types::Item> for RequestResult {
-    fn from(v: data_types::Item) -> Self {
-        Self::Item(v)
-    }
-}
-
-impl From<RequestResult> for data_types::Item {
-    fn from(v: RequestResult) -> Self {
-        match v {
-            RequestResult::Item(i) => i,
-            _ => panic!("Expected RequestResult::, got {:#?}", v),
-        }
-    }
-} 
-
-impl From<data_types::Items> for RequestResult {
-    fn from(v: data_types::Items) -> Self {
-        Self::Items(v)
-    }
-}
-
-impl From<RequestResult> for data_types::Items {
-    fn from(v: RequestResult) -> Self {
-        match v {
-            RequestResult::Items(is) => is,
-            _ => panic!("Expected RequestResult::, got {:#?}", v),
-        }
-    }
-} 
+define_container!(RequestResult: {
+    Response: data_types::Response,
+    Project: data_types::Project,
+    Items: data_types::Items,
+    Item: data_types::Item,
+});
 
 pub struct Client {
     client: TdtClient<TonicChannel>,
