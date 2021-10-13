@@ -6,7 +6,7 @@ mod client;
 
 mod envs;
 
-use clap::{Arg, App};
+use clap::{self, Arg, App};
 use color_eyre::{self, Report};
 use tracing::info;
 use tracing_subscriber::{self, EnvFilter};
@@ -15,6 +15,11 @@ use tracing_subscriber::{self, EnvFilter};
 async fn main() -> Result<(), Box<dyn std::error::Error>>  {
     setup()?;
     let matches = App::new(env!("CARGO_PKG_NAME"))
+                        .setting(clap::AppSettings::ArgRequiredElseHelp)
+                        .setting(clap::AppSettings::ColoredHelp)
+                        .setting(clap::AppSettings::DeriveDisplayOrder)
+                        .setting(clap::AppSettings::GlobalVersion)
+                        .setting(clap::AppSettings::VersionlessSubcommands)
                         .about(env!("CARGO_PKG_DESCRIPTION"))
                         .author(env!("CARGO_PKG_AUTHORS"))
                         .version(env!("CARGO_PKG_VERSION"))
@@ -24,6 +29,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>  {
                             .about("Add a project folder")
                             .alias("a")
                             .usage("tdt add(a) [project/folder] (name)")
+                            .arg(Arg::with_name("FOLDER")
+                                    .help("Path to the project folder")
+                                    .required(true)
+                                    .index(1))
+                            .arg(Arg::with_name("NAME")
+                                    .help("Name of the project")
+                                    .required(false)
+                                    .index(2))
                         ).subcommand(
                             App::new("edit")
                             .about("Edit project meta-data")
