@@ -6,13 +6,13 @@ pub mod data_types {
 
 #[derive(Debug)]
 pub enum Action {
-    Add(primatives::FolderName),
-    Edit(primatives::FolderName),
-    Display(primatives::FolderName),
-    Write(primatives::Item),
-    Remove(primatives::Item),
-    Show(primatives::Item),
-    Find(primatives::Query),
+    Add(Project),
+    Edit(Project),
+    Display(Project),
+    Write(Item),
+    Remove(Item),
+    Show(Item),
+    Find(Query),
 }   
 
 

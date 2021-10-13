@@ -32,13 +32,13 @@ impl Client {
 
     pub async fn request(&mut self, action: Action) -> Result<RequestResult, tonic::Status> {
         match action {
-            Action::Add(project) => Ok(self.client.add(data_types::Project::from(project)).await?.into_inner().into()),
-            Action::Edit(project) => Ok(self.client.edit(data_types::Project::from(project)).await?.into_inner().into()),
-            Action::Display(project) => Ok(self.client.display(data_types::Project::from(project)).await?.into_inner().into()),
-            Action::Write(item) => Ok(self.client.write(data_types::Item::from(item)).await?.into_inner().into()),
-            Action::Remove(item) => Ok(self.client.remove(data_types::Item::from(item)).await?.into_inner().into()),
-            Action::Show(item) => Ok(self.client.show(data_types::Item::from(item)).await?.into_inner().into()),
-            Action::Find(query) => Ok(self.client.find(data_types::Query::from(query)).await?.into_inner().into()),
+            Action::Add(project) => Ok(self.client.add(project).await?.into_inner().into()),
+            Action::Edit(project) => Ok(self.client.edit(project).await?.into_inner().into()),
+            Action::Display(project) => Ok(self.client.display(project).await?.into_inner().into()),
+            Action::Write(item) => Ok(self.client.write(item).await?.into_inner().into()),
+            Action::Remove(item) => Ok(self.client.remove(item).await?.into_inner().into()),
+            Action::Show(item) => Ok(self.client.show(item).await?.into_inner().into()),
+            Action::Find(query) => Ok(self.client.find(query).await?.into_inner().into()),
             _ => panic!("Given action of {:#?} doesn't exist", action),
         }
     }
