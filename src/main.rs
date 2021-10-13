@@ -66,6 +66,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>>  {
 
     let mut server = server::Server::new();
     server.start().await;
+    if let Some(matches) = matches.subcommand_matches("add") {
+        add_action(matches);
+    }
+
     Ok(())
 }
 
@@ -85,22 +89,22 @@ fn setup() -> Result<(), Report> {
     Ok(())
 }
 
-async fn add_action(c: &Context) {
-    let mut client = Client::new().await; 
+async fn add_action<'a>(matches: &clap::ArgMatches<'a>) {
+    let mut client = client::Client::new().await; 
     let  folder_name =
-    match (c.args.get(0), c.args.get(1)) {
-        (Some(folder), Some(name)) => (folder.clone(), name.clone()),
-        (Some(folder), None) => (folder.clone(), folder.clone()),
+    match (matches.value_of("FOLDER"), matches.value_of("NAME")) {
+        (Some(folder), Some(name)) => (folder.to_owned(), name.to_owned()),
+        (Some(folder), None) => (folder.to_owned(), folder.to_owned()),
         _ => panic!("No folder or folder & project name provided")
     };
-    match client.request(Action::Add(folder_name.into())).await {
+    match client.request(gprc::Action::Add(folder_name.into())).await {
         Ok(r) => {
             let response: data_types::Response = r.into();
         }
     };
 }
-fn edit_action(c: &Context) {}
-fn display_action(c: &Context) {}
-fn write_action(c: &Context) {}
-fn remove_action(c: &Context) {}
-fn show_action(c: &Context) {}
+fn edit_action() {todo!()}
+fn display_action() {todo!()}
+fn write_action() {todo!()}
+fn remove_action() {todo!()}
+fn show_action() {todo!()}
