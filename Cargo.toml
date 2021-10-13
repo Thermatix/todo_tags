@@ -7,7 +7,6 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-seahorse = "1.1.2"
 prost = "0.6.1"
 futures = "0.3"
 prost-types = "0.8.0"
@@ -20,6 +19,7 @@ dirs = "4.0.0"
 tonic = {version="0.2.0",features = ["tls"]}
 tokio = {version="0.2.18",features = ["stream", "macros"]}
 http = "0.2.5"
+clap = "2.33.3"
 
 [build-dependencies]
 tonic-build = "0.2.0"
