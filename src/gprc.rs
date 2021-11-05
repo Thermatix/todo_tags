@@ -1,9 +1,61 @@
-tonic::include_proto!("todo_tags");
-
 use super::clap::ArgMatches;
 
+tonic::include_proto!("todo_tags");
+
+
 pub mod data_types {
-    pub use super::{Item, Items, Query, Project,  ResType, Response};
+    use std::fmt::{Display, Formatter, Result};
+    pub use super::{Item, Items, Query, Project,  ResKind, Response};
+
+    // const template_items;
+
+    impl Display for Response {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+            write!(f, "{:?}: ${}", stringify!(self.kind), self.message)
+        }
+    }
+
+    impl Display for Project {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+            write!(f, r#"
+            # Project: {}
+
+            ## Tags
+
+            {}
+
+            ## Items
+
+            {}
+
+            "#,
+            self.name,
+            self.items.as_ref().unwrap().values.as_slice().into_iter().map(|item| { format!("+ {}", item.tag) }).collect::<Vec<String>>().join("\n"),
+            self.items.as_ref().unwrap()
+            )
+        }
+    }
+
+    impl Display for Item {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+            write!(f, "**{}**:{} \n {}",
+                   self.tag,
+                   self.description,
+                   self.file_paths.as_slice().into_iter().map(|fp| format!(" - {} \n", fp) ).collect::<Vec<String>>().join(""))
+        }
+    }
+
+    impl Display for Items {
+        fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+            // let ident: u8 = 0;
+            // let last:
+            write!(f, "{}", self.values.as_slice().into_iter().map(|item| {
+                    format!("{}", item)
+               }).collect::<Vec<String>>().join("\n")
+            )
+        }
+    }
+
 }
 
 #[derive(Debug)]
