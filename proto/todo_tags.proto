@@ -12,7 +12,7 @@ service TDT {
     rpc Find (Query) returns (Items);
 }
 
-enum ResType {
+enum ResKind {
     ERROR = 0;
     SUCCESS = 1;
     NOTE = 2;
@@ -21,7 +21,8 @@ enum ResType {
 message Item {
     string tag = 1;
     string description = 2;
-    repeated string file_paths = 3;
+    string project_path = 3;
+    repeated string file_paths = 4;
 }
 
 message Query {
@@ -29,13 +30,13 @@ message Query {
 }
 
 message Response {
-    ResType type = 1;
+    ResKind kind = 1;
     string message = 2;
 }
 
 message Items {
     uint64 count = 1; 
-    repeated Item items = 2;
+    repeated Item values = 2;
 }
 
 message Project {
