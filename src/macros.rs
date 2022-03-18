@@ -1,4 +1,23 @@
 #[macro_export]
+macro_rules! declare_env {
+    ($env:ident: $env_var:ident, $def:expr, $type:ty) => {
+        pub fn $env() -> $type {
+            match env::var("TDT_$env_var") {
+                Ok(res) => res.into(),
+                _ => $def.into()
+            }
+        }
+    };
+    ($env:ident: $env_var:ident, $def:expr) => {
+        pub fn $env() -> String {
+            match env::var("TDT_$env_var") {
+                Ok(res) => res,
+                _ => $def.to_string()
+            }
+        }
+    }
+}
+#[macro_export]
 macro_rules! define_container {
     (@add_type $type:ty => $enum:ident::$variant:ident) => {
         impl From<$type> for $enum {
