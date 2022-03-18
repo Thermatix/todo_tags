@@ -1,6 +1,7 @@
 #[macro_use]
 mod macros;
 mod gprc;
+mod actions;
 mod server;
 mod client;
 

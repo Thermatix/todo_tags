@@ -1,7 +1,8 @@
 use tonic::{self, transport::Channel as TonicChannel};// Request, Response, Status};
 use http::uri::Uri;
 
-use super::gprc::{Action, tdt_client::TdtClient, data_types};
+use super::actions::Action;
+use super::gprc::{tdt_client::TdtClient, data_types};
 use super::envs;
 use std::convert::From;
 
